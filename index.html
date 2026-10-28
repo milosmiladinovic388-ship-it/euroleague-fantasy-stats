@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="sr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EL Fantasy Pomoćnik</title>
+  <meta name="description" content="Pomoćnik za EuroLeague Fantasy: forma igrača, odbrane po pozicijama i preporuke izmena.">
+  <meta name="theme-color" content="#e8590c">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="EL Fantasy">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <h1>EL Fantasy Pomoćnik</h1>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button data-view="tim" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.8c1.6.8 2.7 2.5 3 5.2"/></svg>
+      Moj tim
+    </button>
+    <button data-view="igraci">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg>
+      Forma
+    </button>
+    <button data-view="odbrana">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/></svg>
+      Odbrane
+    </button>
+    <button data-view="ekipe">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>
+      Ekipe
+    </button>
+    <button data-view="podesavanja">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+      Podešavanja
+    </button>
+  </nav>
+
+  <main>
+    <div class="loading" id="loading">Učitavam podatke…</div>
+    <section class="view active" id="view-tim"></section>
+    <section class="view" id="view-igraci"></section>
+    <section class="view" id="view-odbrana"></section>
+    <section class="view" id="view-ekipe"></section>
+    <section class="view" id="view-podesavanja"></section>
+  </main>
+
+  <div class="modal-bg" id="modal-bg"><div class="modal" id="modal"></div></div>
+
+  <script src="model.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    }
+  </script>
+</body>
+</html>

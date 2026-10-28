@@ -1,0 +1,43 @@
+# Osvežava podatke više puta dnevno i objavljuje aplikaciju na GitHub Pages.
+name: Osvezi podatke i objavi
+
+on:
+  schedule:
+    - cron: '15 */3 * * *'   # na svaka 3 sata
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Preuzmi podatke
+        run: node scripts/fetch-data.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Sacuvaj kes i podatke u repozitorijum
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data cache
+          git diff --cached --quiet || (git commit -m "Podaci $(date -u +%F' '%H:%M)" && git push)
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

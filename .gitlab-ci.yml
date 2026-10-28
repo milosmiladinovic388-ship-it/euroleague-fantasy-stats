@@ -1,0 +1,19 @@
+# Preuzima sveže podatke i objavljuje aplikaciju na GitLab Pages.
+# Automatsko osvežavanje: Build → Pipeline schedules → New schedule, npr. "15 */3 * * *" (na svaka 3 sata).
+image: node:22-alpine
+
+pages:
+  stage: deploy
+  cache:
+    key: euroleague-games
+    paths:
+      - cache/            # box score-ovi odigranih utakmica, da se ne preuzimaju svaki put
+  script:
+    - node scripts/fetch-data.mjs
+    - mkdir -p public
+    - cp -r index.html styles.css model.js app.js sw.js manifest.webmanifest icons data public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
