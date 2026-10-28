@@ -69,7 +69,7 @@ Isto radi i na GitLab-u (`.gitlab-ci.yml`). Projekat može biti i privatan, samo
 4. Adresa je u **Deploy → Pages**. Ako je projekat privatan, u **Settings → General → Visibility** podesi **Pages: Everyone**, da bi stranica radila na telefonu bez prijave na GitLab.
 5. Automatsko osvežavanje: **Build → Pipeline schedules → New schedule**, interval `15 */3 * * *`, grana `main`.
 
-Za razliku od GitHub varijante, GitLab ne upisuje podatke nazad u repozitorijum — svaki pipeline ih preuzme iznova, a već odigrane utakmice čuva u CI kešu.
+Kao i GitHub varijanta, pipeline ne upisuje podatke nazad u repozitorijum — svaki prolaz ih preuzme iznova, a već odigrane utakmice čuva u CI kešu.
 
 ### Instalacija na iPhone
 

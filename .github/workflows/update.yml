@@ -1,4 +1,5 @@
 # Osvežava podatke više puta dnevno i objavljuje aplikaciju na GitHub Pages.
+# Ništa ne upisuje nazad u repozitorijum: odigrane utakmice čuva u Actions kešu.
 name: Osvezi podatke i objavi
 
 on:
@@ -9,7 +10,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -20,24 +21,31 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
+      # Box score-ovi odigranih utakmica; svaki prolaz čuva novu verziju keša
+      - uses: actions/cache@v4
+        with:
+          path: cache
+          key: games-${{ github.run_id }}
+          restore-keys: games-
       - name: Preuzmi podatke
         run: node scripts/fetch-data.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Sacuvaj kes i podatke u repozitorijum
+      - name: Pripremi sajt
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@users.noreply.github.com"
-          git add data cache
-          git diff --cached --quiet || (git commit -m "Podaci $(date -u +%F' '%H:%M)" && git push)
+          mkdir -p public
+          cp -r index.html styles.css model.js app.js sw.js manifest.webmanifest icons data public/
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: public
       - id: deployment
         uses: actions/deploy-pages@v4
